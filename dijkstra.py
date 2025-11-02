@@ -82,3 +82,4 @@ if __name__ == '__main__':
     g.add_vertex('H', {'E': 1, 'F': 3})
 
     print(g.shortest_path('A', 'H'))  # Expected output: ['A', 'B', 'F', 'H']
+    print(g.shortest_path('A', 'K'))  # Expected output: None
