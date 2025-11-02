@@ -16,8 +16,6 @@ class Graph:
         Returns the path as a list of nodes from start to finish.
         If the node does not exist, returns None.
         """
-        if start not in self.vertices or finish not in self.vertices:
-            return None
         
         distances = {}      # Distance from start to each node
         previous = {}       # Previous node in optimal path
@@ -34,33 +32,7 @@ class Graph:
             previous[vertex] = None
         
         # Main Dijkstra loop
-        while nodes:
-            smallest = heapq.heappop(nodes)[1]
 
-            if smallest == finish:
-                # Build the shortest path (forward order)
-                path = []
-                while previous[smallest]:
-                    path.append(smallest)
-                    smallest = previous[smallest]
-                path.append(start)
-                path.reverse()
-                return path
-            
-            if distances[smallest] == sys.maxsize:
-                break
-            
-            # Relax edges
-            for neighbor in self.vertices[smallest]:
-                alt = distances[smallest] + self.vertices[smallest][neighbor]
-                if alt < distances[neighbor]:
-                    distances[neighbor] = alt
-                    previous[neighbor] = smallest
-                    for n in nodes:
-                        if n[1] == neighbor:
-                            n[0] = alt
-                            break
-                    heapq.heapify(nodes)
         
         # If the destination is unreachable, return distance table
         return distances
