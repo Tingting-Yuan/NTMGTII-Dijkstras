@@ -1,5 +1,5 @@
 import unittest
-from dijkstras import Graph
+from dijkstra import Graph
 
 
 class Graph_Test(unittest.TestCase):
