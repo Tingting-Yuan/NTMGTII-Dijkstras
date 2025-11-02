@@ -2,8 +2,8 @@ import heapq
 import sys
 
 class Graph:
-    
     def __init__(self):
+        # Store vertices as {node: {neighbor: cost}}
         self.vertices = {}
         
     def add_vertex(self, name, edges):
@@ -11,15 +11,19 @@ class Graph:
         self.vertices[name] = edges
     
     def shortest_path(self, start, finish):
-        """Compute the shortest path using Dijkstra's algorithm."""
-        # ✅ 如果起点或终点不存在，直接返回 None
+        """
+        Compute the shortest path using Dijkstra's algorithm.
+        Returns the path as a list of nodes from start to finish.
+        If the node does not exist, returns None.
+        """
         if start not in self.vertices or finish not in self.vertices:
             return None
         
-        distances = {}
-        previous = {}
-        nodes = []
+        distances = {}      # Distance from start to each node
+        previous = {}       # Previous node in optimal path
+        nodes = []          # Priority queue (min-heap)
 
+        # Initialize all vertices
         for vertex in self.vertices:
             if vertex == start:
                 distances[vertex] = 0
@@ -29,19 +33,24 @@ class Graph:
                 heapq.heappush(nodes, [sys.maxsize, vertex])
             previous[vertex] = None
         
+        # Main Dijkstra loop
         while nodes:
             smallest = heapq.heappop(nodes)[1]
+
             if smallest == finish:
-                # ✅ 构造反向路径
+                # Build the shortest path (forward order)
                 path = []
                 while previous[smallest]:
                     path.append(smallest)
                     smallest = previous[smallest]
-                return path  # 保持测试期望 ['H','F','B']
+                path.append(start)
+                path.reverse()
+                return path
             
             if distances[smallest] == sys.maxsize:
                 break
             
+            # Relax edges
             for neighbor in self.vertices[smallest]:
                 alt = distances[smallest] + self.vertices[smallest][neighbor]
                 if alt < distances[neighbor]:
@@ -53,9 +62,11 @@ class Graph:
                             break
                     heapq.heapify(nodes)
         
-        return distances  # 如果没找到路径，返回距离表
+        # If the destination is unreachable, return distance table
+        return distances
     
     def __str__(self):
+        """Return the string representation of the graph."""
         return str(self.vertices)
 
 
@@ -69,4 +80,5 @@ if __name__ == '__main__':
     g.add_vertex('F', {'B': 2, 'C': 6, 'D': 8, 'G': 9, 'H': 3})
     g.add_vertex('G', {'C': 4, 'F': 9})
     g.add_vertex('H', {'E': 1, 'F': 3})
-    print(g.shortest_path('A', 'H'))  # 输出 ['H','F','B']
+
+    print(g.shortest_path('A', 'H'))  # Expected output: ['A', 'B', 'F', 'H']
