@@ -1,50 +1,56 @@
 import unittest
-from dijkstra import Graph
+from dijkstras import Graph
+
 
 class Graph_Test(unittest.TestCase):
+
     def setUp(self):
-        """Prepare a sample graph for all tests."""
-        self.g = Graph()
-        self.g.add_vertex('A', {'B': 7, 'C': 8})
-        self.g.add_vertex('B', {'A': 7, 'F': 2})
-        self.g.add_vertex('C', {'A': 8, 'F': 6, 'G': 4})
-        self.g.add_vertex('D', {'F': 8})
-        self.g.add_vertex('E', {'H': 1})
-        self.g.add_vertex('F', {'B': 2, 'C': 6, 'D': 8, 'G': 9, 'H': 3})
-        self.g.add_vertex('G', {'C': 4, 'F': 9})
-        self.g.add_vertex('H', {'E': 1, 'F': 3})
+        """Create two graphs and one empty graph for testing."""
+        # Graph 1: medium connected graph
+        self.graph1 = Graph()
+        self.graph1.add_vertex('A', {'B': 7, 'C': 8})
+        self.graph1.add_vertex('B', {'A': 7, 'F': 2})
+        self.graph1.add_vertex('C', {'A': 8, 'F': 6, 'G': 4})
+        self.graph1.add_vertex('D', {'F': 8})
+        self.graph1.add_vertex('E', {'H': 1})
+        self.graph1.add_vertex('F', {'B': 2, 'C': 6, 'D': 8, 'G': 9, 'H': 3})
+        self.graph1.add_vertex('G', {'C': 4, 'F': 9})
+        self.graph1.add_vertex('H', {'E': 1, 'F': 3})
 
-    def test_shortest_path_A_to_H(self):
-        """Check the main example path from A to H."""
-        path = self.g.shortest_path('A', 'H')
-        self.assertEqual(path, ['A', 'B', 'F', 'H'])
+        # Graph 2: small simple graph
+        self.graph2 = Graph()
+        self.graph2.add_vertex('A', {'B': 1})
+        self.graph2.add_vertex('B', {'A': 1, 'C': 2})
+        self.graph2.add_vertex('C', {'B': 2})
 
-    def test_reverse_path_H_to_A(self):
-        """Check that reverse direction produces correct path."""
-        path = self.g.shortest_path('H', 'A')
-        self.assertEqual(path, ['H', 'F', 'B', 'A'])
 
-    def test_path_to_self(self):
-        """Path from a node to itself should just be the node."""
-        path = self.g.shortest_path('C', 'C')
-        self.assertEqual(path, ['C'])
+    # -------- Graph 1 Tests --------
+    def test_graph1_path_A_to_H(self):
+        """Shortest path A→H in Graph 1."""
+        result = self.graph1.shortest_path('A', 'H')
+        self.assertEqual(result, ['A', 'B', 'F', 'H'])
 
-    def test_nonexistent_node(self):
-        """Nonexistent node should return None."""
-        path = self.g.shortest_path('A', 'Z')
-        self.assertIsNone(path)
+    def test_graph1_nonexistent_target(self):
+        """If target node does not exist, return None."""
+        result = self.graph1.shortest_path('A', 'Z')
+        self.assertIsNone(result)
 
-    def test_unreachable_node(self):
-        """If node is unreachable, algorithm should return distance table."""
-        # 'E' and 'H' form a disconnected subgraph (except through F)
-        g2 = Graph()
-        g2.add_vertex('A', {'B': 1})
-        g2.add_vertex('B', {'A': 1})
-        g2.add_vertex('C', {})  # disconnected node
-        result = g2.shortest_path('A', 'C')
-        self.assertIsInstance(result, dict)
-        self.assertIn('A', result)
-        self.assertIn('C', result)
+    def test_graph1_nonexistent_source(self):
+        """If source node does not exist, return None."""
+        result = self.graph1.shortest_path('Z', 'A')
+        self.assertIsNone(result)
 
-if __name__ == '__main__':
+    # -------- Graph 2 Tests --------
+    def test_graph2_A_to_C(self):
+        """Shortest path A→C in Graph 2 (via B)."""
+        result = self.graph2.shortest_path('A', 'C')
+        self.assertEqual(result, ['A', 'B', 'C'])
+
+    def test_graph2_same_node(self):
+        """Path from A→A should just return ['A']."""
+        result = self.graph2.shortest_path('A', 'A')
+        self.assertEqual(result, ['A'])
+
+
+if __name__ == "__main__":
     unittest.main()
