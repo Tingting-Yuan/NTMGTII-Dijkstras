@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-This project provides a complete Python implementation of **Dijkstra’s algorithm** for finding the shortest path in a weighted graph. The implementation is encapsulated in `dijkstras.py` and supports:
+This project provides a complete Python implementation of **Dijkstra’s algorithm** for finding the shortest path in a weighted graph. The implementation is encapsulated in `dijkstra.py` and supports:
 
 - Adding vertices and their edges with weights.
 - Computing the shortest path between two nodes.
