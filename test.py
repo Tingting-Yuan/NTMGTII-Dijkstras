@@ -23,5 +23,5 @@ class Graph_Test(unittest.TestCase):
         
         self.assertEqual(self.graph.shortest_path('A', 'H'), ['H', 'F', 'B'])
         self.assertEqual(self.graph.shortest_path('H', 'I'), {'A': 12, 'B': 5, 'C': 9, 'D': 11, 'E': 1, 'F': 3, 'G': 12, 'H': 0})
-
-unittest.main()
+if __name__ == "__main__":
+    unittest.main()
